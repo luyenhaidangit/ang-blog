@@ -5,6 +5,5 @@ nav{
 }
 
 .nav-link{
-    text-transform: capitalize;
-    color: var(--primary-color);
+    text-transform: uppercase;
 }
