@@ -1,6 +1,5 @@
 import { Component } from '@angular/core';
-// import { Firestore, collectionData, collection } from '@angular/fire/firestore';
-// import { AngularFirestore } from '@angular/fire/compat/firestore';
+import { AngularFirestore } from '@angular/fire/compat/firestore';
 
 @Component({
   selector: 'app-categories',
@@ -8,7 +7,9 @@ import { Component } from '@angular/core';
   styleUrls: ['./categories.component.css']
 })
 export class CategoriesComponent{
-  constructor(){}
+  constructor(private afs: AngularFirestore) {
+    
+  }
 
   ngOnInit(): void{
 
@@ -18,14 +19,10 @@ export class CategoriesComponent{
     let categoryData = {
       category : formData.value.category
     }
-
-    // this.afs.collection("categories").add(categoryData).then(docRef=>{
-    //   console.log(docRef);
-    // })
-    // .catch(err=>{
-    //   console.log(err);
-    // })
     
-    console.log(categoryData);
+    this.afs.collection('categories').add(categoryData).then(docRef => {
+      console.log(docRef);
+    })
+    .catch(err=>{console.log(err)})
   }
 }

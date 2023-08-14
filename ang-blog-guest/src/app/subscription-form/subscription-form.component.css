@@ -5,10 +5,3 @@
 .subs-text{
     width: 500px;
 }
-
-input[type = text],input[type = email]{
-    height: 60px;
-    padding-left: 20px;
-    font-size: 13px;
-    width: 100%;
-}
