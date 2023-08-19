@@ -27,4 +27,17 @@ export class CategoriesService {
       })
     }));
   }
+
+  updateData(id:any,editData:any){
+    this.afs.collection('categories').doc(id).update(editData).then(docRef=>{
+      this.toastr.success('Data update successfully...!');
+      console.log(docRef);
+    })
+  }
+
+  deleteData(id:any){
+    this.afs.collection('categories').doc(id).delete().then(docRef => {
+      this.toastr.success("Data deleted...!");
+    })
+  }
 }
