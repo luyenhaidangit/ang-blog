@@ -21,6 +21,7 @@
     "@angular/router": "^16.0.0",
     "bootstrap": "4.6",
     "firebase": "^9.6.11",
+    "ngx-toastr": "^17.0.2",
     "rxjs": "~7.8.0",
     "source-map-loader": "^4.0.1",
     "tslib": "^2.3.0",
