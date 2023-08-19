@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { AngularFirestore } from '@angular/fire/compat/firestore';
+import { CategoriesService } from '../services/categories.service';
 
 @Component({
   selector: 'app-categories',
@@ -7,7 +7,7 @@ import { AngularFirestore } from '@angular/fire/compat/firestore';
   styleUrls: ['./categories.component.css']
 })
 export class CategoriesComponent{
-  constructor(private afs: AngularFirestore) {
+  constructor(private categoryService: CategoriesService) {
     
   }
 
@@ -17,12 +17,11 @@ export class CategoriesComponent{
 
   onSubmit(formData:any){
     let categoryData = {
-      category : formData.value.category
+      category : formData.value.category,
+      status : true
     }
+
+    this.categoryService.saveData(categoryData);
     
-    this.afs.collection('categories').add(categoryData).then(docRef => {
-      console.log(docRef);
-    })
-    .catch(err=>{console.log(err)})
   }
 }
