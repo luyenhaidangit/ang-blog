@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { CategoriesService } from '../services/categories.service';
 import { Category } from '../models/category';
 
@@ -7,13 +7,20 @@ import { Category } from '../models/category';
   templateUrl: './categories.component.html',
   styleUrls: ['./categories.component.css']
 })
-export class CategoriesComponent{
+export class CategoriesComponent implements OnInit{
+  categoryArray: any[] = [];
+  formCategory: string = "";
+  formStatus: string = "Add";
+
   constructor(private categoryService: CategoriesService) {
     
   }
 
   ngOnInit(): void{
-
+    this.categoryService.loadData().subscribe(val => {
+      console.log(val);
+      this.categoryArray = val;
+    });
   }
 
   onSubmit(formData:any){
@@ -22,6 +29,14 @@ export class CategoriesComponent{
     }
 
     this.categoryService.saveData(categoryData);
+
+    formData.reset();
     
+  }
+
+  onEdit(category:any){
+    console.log(category);
+    this.formCategory = category;
+    this.formStatus = "Edit";
   }
 }
