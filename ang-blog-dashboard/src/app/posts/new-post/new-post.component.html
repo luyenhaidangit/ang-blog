@@ -55,12 +55,29 @@
               <label>Excerpt</label>
               <textarea
                 class="form-control"
-                name=""
-                id=""
                 cols="30"
                 rows="10"
                 formControlName="excerpt"
+                [ngClass]="{
+                  'is-invalid': fc['excerpt']?.touched && fc['excerpt']?.invalid
+                }"
               ></textarea>
+              <div *ngIf="fc['excerpt'].errors?.['required']">
+                <div
+                  class="alert alert-danger"
+                  *ngIf="fc['excerpt'].touched && fc['excerpt'].invalid"
+                >
+                  Excerpt is required.
+                </div>
+              </div>
+              <div *ngIf="fc['excerpt'].errors?.['minlength']">
+                <div
+                  class="alert alert-danger"
+                  *ngIf="fc['excerpt'].touched && fc['excerpt'].invalid"
+                >
+                  Excerpt must be atleast 50 charectors long.
+                </div>
+              </div>
             </div>
           </div>
         </div>
@@ -69,12 +86,28 @@
       <div class="col-md-5">
         <div class="form-group">
           <label for="">Please select a post category</label>
-          <select class="form-control" name="" id="" formControlName="category">
+          <select
+            class="form-control"
+            name=""
+            id=""
+            formControlName="category"
+            [ngClass]="{
+              'is-invalid': fc['category']?.touched && fc['category']?.invalid
+            }"
+          >
             <option value="">Please select a category</option>
-            <option *ngFor="let category of categories" value="">
+            <option *ngFor="let category of categories" value="1">
               {{ category.data.category }}
             </option>
           </select>
+          <div *ngIf="fc['category'].errors?.['required']">
+            <div
+              class="alert alert-danger"
+              *ngIf="fc['category'].touched && fc['category'].invalid"
+            >
+              Category is required.
+            </div>
+          </div>
         </div>
 
         <div class="form-group">
@@ -111,9 +144,11 @@
       </div>
 
       <div class="col-md-12 text-center mb-5">
-        <button class="btn btn-info">Save Post</button>
-        <button class="btn btn-warning ml-3" routerLink="/posts">
+        <button [disabled]="postForm.invalid" class="btn btn-info">
           Save Post
+        </button>
+        <button class="btn btn-warning ml-3" routerLink="/posts">
+          Back to post
         </button>
       </div>
     </div>
