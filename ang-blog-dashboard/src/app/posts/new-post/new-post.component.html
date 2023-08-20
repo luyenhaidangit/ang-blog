@@ -6,88 +6,116 @@
     </div>
   </div>
 
-  <div class="row">
-    <div class="col-md-7">
-      <div class="card shadow-effect">
-        <div class="card-body">
-          <div class="form-group">
-            <label>Title</label>
-            <input
-              class="form-control"
-              type="text"
-              name=""
-              id=""
-              (keyup)="onTitleChanged($event)"
-            />
+  <form [formGroup]="postForm">
+    <div class="row">
+      <div class="col-md-7">
+        <div class="card shadow-effect">
+          <div class="card-body">
+            <div class="form-group">
+              <label>Title</label>
+              <input
+                class="form-control"
+                type="text"
+                (keyup)="onTitleChanged($event)"
+                formControlName="title"
+                [ngClass]="{
+                  'is-invalid': fc['title']?.touched && fc['title']?.invalid
+                }"
+              />
+              <div *ngIf="fc['title'].errors?.['required']">
+                <div
+                  class="alert alert-danger"
+                  *ngIf="fc['title'].touched && fc['title'].invalid"
+                >
+                  Title is required.
+                </div>
+              </div>
+              <div *ngIf="fc['title'].errors?.['minlength']">
+                <div
+                  class="alert alert-danger"
+                  *ngIf="fc['title'].touched && fc['title'].invalid"
+                >
+                  Title must be atleast 10 charectors long.
+                </div>
+              </div>
+            </div>
+            <div class="form-group">
+              <label>Permalink</label>
+              <input
+                class="form-control"
+                type="text"
+                name=""
+                id=""
+                [(ngModel)]="permalink"
+                [readonly]="true"
+                formControlName="permalink"
+              />
+            </div>
+            <div class="form-group">
+              <label>Excerpt</label>
+              <textarea
+                class="form-control"
+                name=""
+                id=""
+                cols="30"
+                rows="10"
+                formControlName="excerpt"
+              ></textarea>
+            </div>
           </div>
-          <div class="form-group">
-            <label>Permalink</label>
-            <input
-              class="form-control"
-              type="text"
-              name=""
-              id=""
-              [(ngModel)]="permalink"
-              disabled
-            />
-          </div>
-          <div class="form-group">
-            <label>Excerpt</label>
-            <textarea
-              class="form-control"
-              name=""
-              id=""
-              cols="30"
-              rows="10"
-            ></textarea>
-          </div>
+        </div>
+      </div>
+
+      <div class="col-md-5">
+        <div class="form-group">
+          <label for="">Please select a post category</label>
+          <select class="form-control" name="" id="" formControlName="category">
+            <option value="">Please select a category</option>
+            <option *ngFor="let category of categories" value="">
+              {{ category.data.category }}
+            </option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label for="">Post Image</label>
+          <img
+            [src]="imgSrc"
+            class="form-control img-fluid img-preview"
+            alt=""
+          />
+          <input
+            type="file"
+            class="form-control"
+            accept="image/*"
+            (change)="showPreview($event)"
+            formControlName="postImg"
+          />
         </div>
       </div>
     </div>
 
-    <div class="col-md-5">
-      <div class="form-group">
-        <label for="">Please select a post category</label>
-        <select class="form-control" name="" id="">
-          <option value="">Please select a category</option>
-          <option *ngFor="let category of categories" value="">
-            {{ category.data.category }}
-          </option>
-        </select>
-      </div>
-
-      <div class="form-group">
-        <label for="">Post Image</label>
-        <img [src]="imgSrc" class="form-control img-fluid img-preview" alt="" />
-        <input
-          type="file"
-          class="form-control"
-          accept="image/*"
-          (change)="showPreview($event)"
-        />
-      </div>
-    </div>
-  </div>
-
-  <div class="row mt-3 mb-5">
-    <div class="col-md-12">
-      <div class="card shadow-effect">
-        <div class="card-body">
-          <div class="form-group">
-            <label for="">Content</label>
-            <angular-editor
-              placeholder="Add your Content here"
-            ></angular-editor>
+    <div class="row mt-3 mb-5">
+      <div class="col-md-12">
+        <div class="card shadow-effect">
+          <div class="card-body">
+            <div class="form-group">
+              <label for="">Content</label>
+              <angular-editor
+                placeholder="Add your Content here"
+                formControlName="content"
+              ></angular-editor>
+            </div>
           </div>
         </div>
       </div>
-    </div>
 
-    <div class="col-md-12 text-center mb-5">
-      <button class="btn btn-info">Save Post</button>
-      <button class="btn btn-warning ml-3" routerLink="/posts">
-        Save Post
-      </button>
+      <div class="col-md-12 text-center mb-5">
+        <button class="btn btn-info">Save Post</button>
+        <button class="btn btn-warning ml-3" routerLink="/posts">
+          Save Post
+        </button>
+      </div>
     </div>
-  </div>
+  </form>
 </div>
