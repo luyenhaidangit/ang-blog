@@ -6,7 +6,7 @@
     </div>
   </div>
 
-  <form [formGroup]="postForm">
+  <form [formGroup]="postForm" (ngSubmit)="onSubmit()">
     <div class="row">
       <div class="col-md-7">
         <div class="card shadow-effect">
@@ -19,7 +19,7 @@
                 (keyup)="onTitleChanged($event)"
                 formControlName="title"
                 [ngClass]="{
-                  'is-invalid': fc['title']?.touched && fc['title']?.invalid
+                  'is-invalid': fc['title'].touched && fc['title'].invalid
                 }"
               />
               <div *ngIf="fc['title'].errors?.['required']">
@@ -59,7 +59,7 @@
                 rows="10"
                 formControlName="excerpt"
                 [ngClass]="{
-                  'is-invalid': fc['excerpt']?.touched && fc['excerpt']?.invalid
+                  'is-invalid': fc['excerpt'].touched && fc['excerpt'].invalid
                 }"
               ></textarea>
               <div *ngIf="fc['excerpt'].errors?.['required']">
@@ -92,11 +92,14 @@
             id=""
             formControlName="category"
             [ngClass]="{
-              'is-invalid': fc['category']?.touched && fc['category']?.invalid
+              'is-invalid': fc['category'].touched && fc['category'].invalid
             }"
           >
             <option value="">Please select a category</option>
-            <option *ngFor="let category of categories" value="1">
+            <option
+              *ngFor="let category of categories"
+              value="{{ category.id }}-{{ category.data.category }}"
+            >
               {{ category.data.category }}
             </option>
           </select>
