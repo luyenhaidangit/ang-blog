@@ -77,6 +77,10 @@ export class NewPostComponent implements OnInit{
     }
     console.log(postData)
 
-    this.postService.uploadImage(this.selectedImg);
+    this.postService.uploadImage(this.selectedImg,postData);
+
+    this.postForm.reset();
+
+    this.imgSrc = './assets/image-not-found.png';
   }
 }
