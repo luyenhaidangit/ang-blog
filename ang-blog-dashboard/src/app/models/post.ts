@@ -6,7 +6,7 @@ export interface Post {
         category:string
     },
     postImgPath:string,
-    exerpt:string,
+    excerpt:string,
     content:string,
     isFeatured:boolean,
     views:number,

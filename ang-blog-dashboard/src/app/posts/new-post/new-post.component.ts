@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, MaxValidator, Validators } from '@angular/forms';
+import { ActivatedRoute } from '@angular/router';
 import { Post } from 'src/app/models/post';
 import { CategoriesService } from 'src/app/services/categories.service';
 import { PostsService } from 'src/app/services/posts.service';
@@ -14,19 +15,30 @@ export class NewPostComponent implements OnInit{
   imgSrc:any = './assets/image-not-found.png';
   selectedImg:any;
   categories: any[] = [];
-  postForm: FormGroup;
+  postForm: any;
+  post: any;
+  formStatus: string = "Add New";
 
-  constructor(private categoryService:CategoriesService, private fb:FormBuilder, private postService:PostsService) {
-    this.postForm = this.fb.group({
-      title: ['',[Validators.required,Validators.minLength(10)]],
-      permalink: ['',[Validators.required]],
-      excerpt: ['',[Validators.required,Validators.minLength(50)]],
-      category: ['',[Validators.required]],
-      postImg: ['',[]],
-      content: ['',[]]
+  constructor(private categoryService:CategoriesService, private fb:FormBuilder, private postService:PostsService,private route: ActivatedRoute) {
+    this.route.queryParams.subscribe(val => {
+      this.postService.loadOneData(val['id']).subscribe(post => {
+        this.post = post;
+
+        console.log(this.post)
+        
+        this.postForm = this.fb.group({
+          title: [this.post.title,[Validators.required,Validators.minLength(10)]],
+          permalink: [this.post.permalink,[Validators.required]],
+          excerpt: [this.post.excerpt,[Validators.required,Validators.minLength(50)]],
+          category: [`${this.post.category.categoryId}-${this.post.category.category}`,[Validators.required]],
+          postImg: ['',[]],
+          content: [this.post.content,[]]
+        })
+
+        this.imgSrc = this.post.postImgPath;
+        this.formStatus = "Edit";
+      });
     })
-
-    console.log(this.postForm.controls);
   }
 
   ngOnInit(): void {
@@ -68,7 +80,7 @@ export class NewPostComponent implements OnInit{
         category: splitted[1]
       },
       postImgPath: '',
-      exerpt:this.postForm.value.excerpt,
+      excerpt:this.postForm.value.excerpt,
       content:this.postForm.value.content,
       isFeatured: false,
       views: 0,
