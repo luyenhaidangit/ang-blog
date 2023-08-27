@@ -54,7 +54,12 @@
                   >
                     Edit
                   </button>
-                  <button class="btn btn-sm btn-danger ml-2">Delete</button>
+                  <button
+                    class="btn btn-sm btn-danger ml-2"
+                    (click)="onDelete(post.data.postImgPath, post.id)"
+                  >
+                    Delete
+                  </button>
                 </th>
               </tr>
             </tbody>
