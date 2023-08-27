@@ -80,4 +80,10 @@ export class PostsService {
       this.toastr.warning('Data deleted...!');
     })
   }
+
+  makeFeatured(id:any, featureData:any){
+    this.afs.doc(`posts/${id}`).update(featureData).then(()=>{
+      this.toastr.info("Featured status updated!")
+    })
+  }
 }
