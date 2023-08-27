@@ -18,22 +18,35 @@ export class NewPostComponent implements OnInit{
   postForm: any;
   post: any;
   formStatus: string = "Add New";
+  docId: string = '';
 
   constructor(private categoryService:CategoriesService, private fb:FormBuilder, private postService:PostsService,private route: ActivatedRoute) {
     this.route.queryParams.subscribe(val => {
       this.postService.loadOneData(val['id']).subscribe(post => {
+        this.docId = val['id'];
         this.post = post;
 
         console.log(this.post)
         
-        this.postForm = this.fb.group({
-          title: [this.post.title,[Validators.required,Validators.minLength(10)]],
-          permalink: [this.post.permalink,[Validators.required]],
-          excerpt: [this.post.excerpt,[Validators.required,Validators.minLength(50)]],
-          category: [`${this.post.category.categoryId}-${this.post.category.category}`,[Validators.required]],
-          postImg: ['',[]],
-          content: [this.post.content,[]]
-        })
+        if(this.docId){
+          this.postForm = this.fb.group({
+            title: [this.post.title,[Validators.required,Validators.minLength(10)]],
+            permalink: [this.post.permalink,[Validators.required]],
+            excerpt: [this.post.excerpt,[Validators.required,Validators.minLength(50)]],
+            category: [`${this.post.category.categoryId}-${this.post.category.category}`,[Validators.required]],
+            postImg: ['',[]],
+            content: [this.post.content,[]]
+          })
+        }else{
+          this.postForm = this.fb.group({
+            title: ['',[Validators.required,Validators.minLength(10)]],
+            permalink: ['',[Validators.required]],
+            excerpt: ['',[Validators.required,Validators.minLength(50)]],
+            category: ['',[Validators.required]],
+            postImg: ['',[]],
+            content: ['',[]]
+          })
+        }
 
         this.imgSrc = this.post.postImgPath;
         this.formStatus = "Edit";
@@ -79,7 +92,7 @@ export class NewPostComponent implements OnInit{
         categoryId: splitted[0],
         category: splitted[1]
       },
-      postImgPath: '',
+      postImgPath: this.post.postImgPath,
       excerpt:this.postForm.value.excerpt,
       content:this.postForm.value.content,
       isFeatured: false,
@@ -89,7 +102,7 @@ export class NewPostComponent implements OnInit{
     }
     console.log(postData)
 
-    this.postService.uploadImage(this.selectedImg,postData);
+    this.postService.uploadImage(this.selectedImg,postData,this.formStatus,this.docId);
 
     this.postForm.reset();
 

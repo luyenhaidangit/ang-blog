@@ -12,19 +12,32 @@ export class PostsService {
 
   constructor(private storage: AngularFireStorage, private afs:AngularFirestore, private toastr:ToastrService, private router: Router) { }
 
-  uploadImage(selectedImage:any,postData:any){
+  uploadImage(selectedImage:any,postData:any,formStatus:any,id:any){
     const filePath = `postIMG/${Date.now()}`;
     console.log(filePath);
 
-    this.storage.upload(filePath,selectedImage).then(()=>{
-      console.log("Post image uploaded successfully!");
-
-      this.storage.ref(filePath).getDownloadURL().subscribe(URL=>{
-        postData.postImgPath = URL;
-
-        this.saveData(postData);
+    if(selectedImage){
+      this.storage.upload(filePath,selectedImage).then(()=>{
+        console.log("Post image uploaded successfully!");
+  
+        this.storage.ref(filePath).getDownloadURL().subscribe(URL=>{
+          postData.postImgPath = URL;
+  
+          if(formStatus==='Edit'){
+            this.updateData(id,postData);
+          }else{
+            this.saveData(postData);
+          }
+        })
       })
-    })
+    }else{
+      console.log(postData)
+      if(formStatus==='Edit'){
+        this.updateData(id,postData);
+      }else{
+        this.saveData(postData);
+      }
+    }
   }
 
   saveData(postData:any){
@@ -47,5 +60,12 @@ export class PostsService {
 
   loadOneData(id:any){
     return this.afs.doc(`posts/${id}`).valueChanges();
+  }
+
+  updateData(id:any,postData:any){
+    this.afs.doc(`posts/${id}`).update(postData).then(()=>{
+      this.toastr.success('Data update successfullly!');
+      this.router.navigate(['/posts']);
+    })
   }
 }
